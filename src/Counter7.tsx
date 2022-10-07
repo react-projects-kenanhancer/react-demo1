@@ -5,34 +5,30 @@ type AsyncState<R> = {
   loading: boolean;
   error: Error | undefined;
   result: R | undefined;
-  execute: () => Promise<R>;
 };
 
-const useAsync = (asyncFunction: () => Promise<any>, immediate = true) => {
-  const [status, setStatus] = useState("idle");
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState();
-  const [error, setError] = useState<Error>();
+const useAsync = (asyncFunction: () => Promise<void>, immediate = true) => {
+  const [state, setState] = useState<AsyncState<any>>({
+    status: "idle",
+    loading: false,
+    error: undefined,
+    result: undefined,
+  });
 
   // The execute function wraps asyncFunction and
   // handles setting state for pending, value, and error.
   // useCallback ensures the below useEffect is not called
   // on every render, but only if asyncFunction changes.
   const execute = useCallback(() => {
-    setStatus("pending");
-    setLoading(true);
-    setResult(undefined);
-    setError(undefined);
+    setState({ ...state, loading: true, status: "pending" });
     return asyncFunction()
       .then((response: any) => {
-        setResult(response);
-        setStatus("success");
+        setState({ ...state, status: "success", result: response });
       })
       .catch((error: Error) => {
-        setError(error);
-        setStatus("error");
+        setState({ ...state, status: "error", error });
       })
-      .finally(() => setLoading(false));
+      .finally(() => setState({ ...state, loading: false }));
   }, [asyncFunction]);
 
   // Call execute if we want to fire it right away.
@@ -44,7 +40,7 @@ const useAsync = (asyncFunction: () => Promise<any>, immediate = true) => {
     }
   }, [execute, immediate]);
 
-  return { execute, status, loading, result, error } as AsyncState<any>;
+  return { ...state, execute };
 };
 
 // An async function for testing our hook.
@@ -138,7 +134,7 @@ export interface CounterProps {
   initialCounter?: number;
 }
 
-export const Counter6 = ({ initialCounter = 0 }: CounterProps) => {
+export const Counter7 = ({ initialCounter = 0 }: CounterProps) => {
   const counterService = useCounterService(initialCounter);
 
   useEffect(
