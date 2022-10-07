@@ -1,25 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Counter } from "./Counter";
+import { Counter2 } from "./Counter2";
+import { Counter3 } from "./Counter3";
+import { Counter4 } from "./Counter4";
+import { Counter5 } from "./Counter5";
+import { Counter6 } from "./Counter6";
+import { PersonForm } from "./person/PersonForm";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Counter />
+      <br />
+      <Counter2 />
+      <br />
+      <Counter3 />
+      <br />
+      <Counter4 />
+      <br />
+      <Counter5 />
+      <br />
+      <Counter6 />
+      <br />
+      <PersonForm />
+    </>
   );
 }
 
