@@ -1,8 +1,7 @@
-import { Reducer, useEffect, useReducer } from "react";
+import React, { Reducer, useEffect, useReducer } from "react";
 
 type CounterState = {
   counter: number;
-  counter2: number;
 };
 
 type CounterActions =
@@ -24,7 +23,7 @@ export const counterReducer: Reducer<CounterState, CounterActions> = (
     case "DECREMENT":
       return { ...state, counter: state.counter - 1 };
     case "RESET":
-      return { counter: 0, counter2: 0 };
+      return { counter: 0 };
     case "INCREASE":
       return { ...state, counter: state.counter + action.value };
     case "DECREASE":
@@ -34,10 +33,9 @@ export const counterReducer: Reducer<CounterState, CounterActions> = (
   }
 };
 
-const useCounterService = (initialCounter = 0) => {
+const useCounter = (initialCounter = 0) => {
   const [counterState, counterDispatch] = useReducer(counterReducer, {
     counter: initialCounter,
-    counter2: 0,
   });
 
   const onReset = () => counterDispatch({ type: "RESET" });
@@ -56,45 +54,29 @@ const useCounterService = (initialCounter = 0) => {
   };
 };
 
-type CounterService = ReturnType<typeof useCounterService>;
-
 export interface CounterProps {
   initialCounter?: number;
 }
 
-export const Counter5 = ({ initialCounter = 0 }: CounterProps) => {
-  const counterService = useCounterService(initialCounter);
+export const Counter4 = ({ initialCounter = 0 }: CounterProps) => {
+  const {
+    counterState,
+    onReset,
+    onIncrement,
+    onDecrement,
+    onIncrease,
+    onDecrease,
+  } = useCounter();
 
-  useEffect(
-    () => console.log(counterService.counterState.counter),
-    [counterService.counterState.counter]
-  );
+  useEffect(() => console.log(counterState.counter), [counterState.counter]);
 
   return (
     <>
-      Count: {counterService.counterState.counter}
-      <button onClick={counterService.onReset}>Reset</button>
-      <Increaser {...counterService} />
-      <Decreaser {...counterService} />
-    </>
-  );
-};
-
-const Increaser = ({ onIncrement, onIncrease, ...rest }: CounterService) => {
-  return (
-    <>
+      Count: {counterState.counter}
+      <button onClick={onReset}>Reset</button>
+      <button onClick={onDecrement}>-</button>
       <button onClick={onIncrement}>+</button>
       <button onClick={onIncrease}>Increase by 2</button>
-      <Decreaser {...rest} />
-    </>
-  );
-};
-
-type DecreaserProps = Pick<CounterService, "onDecrease" | "onDecrement">;
-const Decreaser = ({ onDecrement, onDecrease }: DecreaserProps) => {
-  return (
-    <>
-      <button onClick={onDecrement}>-</button>
       <button onClick={onDecrease}>Decrease by 2</button>
     </>
   );

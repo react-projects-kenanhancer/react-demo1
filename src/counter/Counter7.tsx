@@ -1,4 +1,10 @@
-import { Reducer, useCallback, useEffect, useReducer, useState } from "react";
+import React, {
+  Reducer,
+  useCallback,
+  useEffect,
+  useReducer,
+  useState,
+} from "react";
 
 type AsyncState<R> = {
   status: "idle" | "pending" | "success" | "error";
@@ -18,17 +24,17 @@ const useAsync = (asyncFunction: () => Promise<void>, immediate = true) => {
   // The execute function wraps asyncFunction and
   // handles setting state for pending, value, and error.
   // useCallback ensures the below useEffect is not called
-  // on every render, but only if asyncFunction changes.
+  // on every render, but only if asyncFunction cha©nges.
   const execute = useCallback(() => {
-    setState({ ...state, loading: true, status: "pending" });
+    setState((ps) => ({ ...ps, loading: true, status: "pending" }));
     return asyncFunction()
       .then((response: any) => {
-        setState({ ...state, status: "success", result: response });
+        setState((ps) => ({ ...ps, status: "success", result: response }));
       })
       .catch((error: Error) => {
-        setState({ ...state, status: "error", error });
+        setState((ps) => ({ ...ps, status: "error", error }));
       })
-      .finally(() => setState({ ...state, loading: false }));
+      .finally(() => setState((ps) => ({ ...ps, loading: false })));
   }, [asyncFunction]);
 
   // Call execute if we want to fire it right away.

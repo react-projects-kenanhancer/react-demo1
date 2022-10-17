@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useInput } from "./useInput";
 
 export const PersonForm2 = () => {
@@ -48,7 +48,9 @@ export const PersonForm2 = () => {
         Reset
       </button>
       {persons.persons.map((p) => (
-        <p>{p.firstName} {p.lastName}</p>
+        <p>
+          {p.firstName} {p.lastName}
+        </p>
       ))}
     </>
   );

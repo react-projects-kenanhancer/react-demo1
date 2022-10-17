@@ -1,4 +1,4 @@
-import { Reducer, useEffect, useReducer } from "react";
+import React, { Reducer, useEffect, useReducer } from "react";
 
 type CounterState = {
   counter: number;

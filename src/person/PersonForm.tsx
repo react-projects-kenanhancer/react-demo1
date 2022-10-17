@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useInput } from "./useInput";
 
 export const PersonForm = () => {
@@ -47,8 +47,10 @@ export const PersonForm = () => {
       <button type="button" onClick={handleReset}>
         Reset
       </button>
-      {persons.persons.map((p) => (
-        <p>{p.firstName} {p.lastName}</p>
+      {persons.persons.map((p, index) => (
+        <p key={index}>
+          {p.firstName} {p.lastName}
+        </p>
       ))}
     </>
   );
